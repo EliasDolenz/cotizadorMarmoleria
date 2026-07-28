@@ -1,0 +1,124 @@
+@startuml
+
+' Ponemos todas las clases y relaciones dentro de un solo bloque
+
+' Definimos un Enum para los estados del proyecto, como mencionaste en tus comentarios
+enum EstadoProyecto {
+  EN_PRESUPUESTO
+  EN_CURSO
+  FINALIZADO
+}
+
+class Cliente {
+  -id: Long
+  -nombre: String
+  -apellido: String
+  -email: String
+  -telefono: String
+  -proyectosVendidos: List<Proyecto>
+  -proyectosPresupuestados: List<Proyecto>
+}
+
+class Proyecto {
+  -id: Long
+  -nombre: String
+  -direccion: String
+  -pisos: Integer
+  -fechaPresupuesto: Date
+  -estado: EstadoProyecto
+  -descuentoGeneral: BigDecimal
+  -conIva: Boolean
+  -iva: BigDecimal
+  --
+  + calcularPrecioTotal(): BigDecimal
+}
+
+class Ambiente {
+  -id: Long
+  -nombre: String
+  -descuentoGeneral: BigDecimal
+  --
+  + calcularPrecio(): BigDecimal
+}
+
+' Hacemos "Trabajo" una clase abstracta, ya que no existirá por sí sola
+abstract class Trabajo {
+  -id: Long
+  -nombre: String
+  -descripcion: String
+  -descuento: BigDecimal
+  --
+  + calcularPrecio(): BigDecimal
+}
+
+class TrabajoMaterial extends Trabajo {
+  -largo: BigDecimal
+  -ancho: BigDecimal
+}
+
+' Esta clase parece una combinación de las otras.
+' La he mantenido, pero podríamos analizar si es necesaria.
+class TrabajoClasico extends Trabajo {
+  -largo: BigDecimal
+  -ancho: BigDecimal
+}
+
+class TrabajoManoObra extends Trabajo {
+  -horas: BigDecimal ' Es mejor medir la mano de obra en horas que en m2
+}
+
+class TrabajoExterno extends Trabajo {
+  -costo: BigDecimal ' El proveedor nos da un costo, no medidas
+}
+
+class Material {
+  -id: Long
+  -nombre: String
+  -largoPlaca: BigDecimal
+  -anchoPlaca: BigDecimal
+  -terminacion: String
+  -precioPorM2: BigDecimal
+}
+
+class Proveedor {
+  -id: Long
+  -nombre: String
+  -descripcion: String
+  -email: String
+  -telefono: String
+}
+
+' Clase "ManoObra" que mencionaste en "TrabajoClasico" y "TrabajoManoObra"
+class ManoObra {
+    -id: Long
+    -descripcion: String
+    -costoPorHora: BigDecimal
+}
+
+
+' --- RELACIONES ---
+
+' Un Cliente tiene muchos Proyectos
+Cliente "1" -- "0..*" Proyecto : "tiene"
+
+' Un Proyecto tiene muchos Ambientes
+Proyecto "1" -- "0..*" Ambiente : "contiene"
+
+' Un Ambiente tiene muchos Trabajos
+Ambiente "1" -- "0..*" Trabajo : "agrupa"
+
+' Relaciones de Herencia (la flecha indica "es un")
+Trabajo <|-- TrabajoMaterial
+Trabajo <|-- TrabajoClasico
+Trabajo <|-- TrabajoManoObra
+Trabajo <|-- TrabajoExterno
+
+' Relaciones de Asociación/Composición
+TrabajoMaterial "1" -- "1" Material : "usa"
+TrabajoClasico "1" -- "1" Material : "usa"
+TrabajoClasico "1" -- "1" ManoObra : "requiere"
+TrabajoManoObra "1" -- "1" ManoObra : "requiere"
+TrabajoExterno "1" -- "1" Proveedor : "contrata a"
+
+
+@enduml
