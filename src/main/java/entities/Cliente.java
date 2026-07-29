@@ -2,8 +2,10 @@ package entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,14 @@ public class Cliente {
     @NotBlank(message = "El teléfono no puede estar vacío")
     @Column(name = "telefono", nullable = false)
     private String telefono;
+
+    @NotNull
+    @Column(name = "contador_de_ventas", nullable = false)
+    private Integer contadorDeVentas  = 0;
+
+
+    @Column(name = "fecha_ultima_venta")
+    private LocalDate fechaUltimaVenta;
 
     @OneToMany(mappedBy = "cliente", cascade =CascadeType.ALL, orphanRemoval = true)
     private List<Proyecto> proyectos = new ArrayList<>();

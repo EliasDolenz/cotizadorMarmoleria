@@ -14,15 +14,26 @@ Este archivo documenta el progreso, las decisiones de diseño y los hitos alcanz
 - Modificadores (Bordes, Alzadas, Revestimientos).
 - Motor de cálculo: $m^2$, mermas, alertas técnicas y logística.
 
-## 🚦 Estado Actual: Fase 2 - Diseño de Datos ✅
+## 🚦 Estado Actual: Fase 3 - Implementación de Entidades JPA ✅
 - [x] Definición de visión y alcance.
 - [x] **Diseño del Diagrama Entidad-Relación (DER)** ← *Completado 2026-07-20*.
 - [x] Definición de entidades núcleo.
-- [ ] Crear entidades JPA en Java.
+- [x] Crear entidades JPA en Java.
 
 ## 🗓️ Registro de Avances
 
+### 2026-07-21: Fase 3 - Implementación de Entidades JPA (Parte 1) ✅
 
+#### Avances Clave
+1.  **Refinamiento de UML y Entidades JPA**:
+    *   Se estableció el enfoque de modelado UML previo a la implementación JPA.
+    *   **Entidad `Cliente.java`**: Implementada y revisada. Incluye campos de negocio (`contadorDeVentas`, `fechaUltimaVenta`) y relación `OneToMany` con `Proyecto` consolidada.
+    *   **Entidad `Trabajo.java`**: Implementada como `abstract class` (STI). Se corrigió el tipo de `descuento` a `BigDecimal` y se añadió el método abstracto `calcularPrecio()`.
+    *   **Decisión `TipoBorde`**: Se determinó que `TipoBorde` será una **Entidad JPA** (clase) para permitir la configuración de precios por el usuario.
+    *   **Configuración `BigDecimal`**: Se definió `precision = 15` y `scale = 2` para los campos `BigDecimal` en la base de datos.
+
+#### Próximo Paso
+- [ ] Continuar con la creación y revisión de entidades JPA en Java, comenzando por `Ambiente.java`.
 
 ### 2026-07-20: Fase 2 - Diseño del Diagrama Entidad-Relación (DER) ✅
 
@@ -85,8 +96,6 @@ Cliente
 #### Archivo Generado
 - **`SCHEMA.sql`**: DDL completo del esquema MySQL con todas las tablas, índices, constraints y notas críticas.
 
-#### Próximo Paso
-- [ ] Crear entidades JPA en Java (paso a paso, entidad por entidad).
 #### Spring Initializr
 - [x] Generación del proyecto con Spring Initializr.
   - **Java**: 21
@@ -95,14 +104,14 @@ Cliente
 
 #### Dependencias Configuradas (POM.xml)
 - [x] **Persistencia**: `spring-boot-starter-data-jpa` (ORM/JPA)
-- [x] **BD y Versionado**: 
+- [x] **BD y Versionado**:
   - `spring-boot-starter-flyway` (Migraciones)
   - `flyway-mysql` (Driver MySQL para Flyway)
   - `mysql-connector-j` (JDBC Driver)
 - [x] **Seguridad**: `spring-boot-starter-security` (Autenticación/Autorización)
 - [x] **Validación**: `spring-boot-starter-validation` (Bean Validation)
 - [x] **REST API**: `spring-boot-starter-web` (Spring MVC)
-- [x] **Utilidades**: 
+- [x] **Utilidades**:
   - `lombok` (Reducción de boilerplate)
   - `spring-boot-devtools` (Hot reload)
 - [x] **Testing**: Dependencias de test para JPA, Flyway, Security, Validation, Web
