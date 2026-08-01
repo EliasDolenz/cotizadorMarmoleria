@@ -1,6 +1,7 @@
 package entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -20,35 +21,41 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank
+    @NotBlank(message = "El nombre del material no puede estar vacío") // CORRECCIÓN APLICADA
     @Column(name = "nombre", nullable = false)
     private String nombre;
     
-    @NotNull
-    @Column(name = "largoPlaca", nullable = false)
-    private Double largoPlaca;
+    @NotNull(message = "El largo de la placa no puede ser nulo") // CORRECCIÓN APLICADA
+    @Column(name = "largo_placa", nullable = false, precision = 15, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = false, message = "El largo de la placa debe ser mayor que 0")
+    private BigDecimal largoPlaca;
     
-    @NotNull
-    @Column(name = "anchoPlaca", nullable = false)
-    private Double anchoPlaca;
+    @NotNull(message = "El ancho de la placa no puede ser nulo") // CORRECCIÓN APLICADA
+    @Column(name = "ancho_placa", nullable = false, precision = 15, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = false, message = "El ancho de la placa debe ser mayor que 0")
+    private BigDecimal anchoPlaca;
     
-    @NotNull
-    @Column(name = "pesoM2", nullable = false)
-    private Double pesoM2;
+    @NotNull(message = "El peso por metro cuadrado no puede ser nulo") // CORRECCIÓN APLICADA
+    @Column(name = "peso_m2", nullable = false, precision = 15, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = false, message = "El peso por metro cuadrado debe ser mayor que 0")
+    private BigDecimal pesoM2;
     
-    @NotNull
-    @Column(name = "precioPorM2", nullable = false)
+    @NotNull(message = "El precio por metro cuadrado no puede ser nulo") // CORRECCIÓN APLICADA
+    @Column(name = "precio_por_m2", nullable = false, precision = 15, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio por metro cuadrado debe ser mayor que 0")
     private BigDecimal precioPorM2;
     
-    @NotNull
-    @Column(name = "precioPorPlaca", nullable = false)
+    @NotNull(message = "El precio por placa no puede ser nulo") // CORRECCIÓN APLICADA
+    @Column(name = "precio_por_placa", nullable = false, precision = 15, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio por placa debe ser mayor que 0")
     private BigDecimal precioPorPlaca;
-    
-    @NotNull
-    @Column(name = "terminación", nullable = false)
+
+    @NotNull(message = "La terminación no puede ser nula")
+    @ManyToOne
+    @JoinColumn(name = "terminacion_id", nullable = false)
     private TipoTerminacion terminacion;
 
-    @NotNull
-    @Column(name = "esRecorte", nullable = false)
+    @NotNull(message = "Se debe especificar si es un recorte") // CORRECCIÓN APLICADA
+    @Column(name = "es_recorte", nullable = false)
     private Boolean esRecorte;
 }

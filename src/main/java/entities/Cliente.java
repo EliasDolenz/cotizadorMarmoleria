@@ -38,7 +38,7 @@ public class Cliente {
     @Column(name = "telefono", nullable = false)
     private String telefono;
 
-    @NotNull
+    @NotNull(message = "El contador de ventas no puede ser nulo") // CORRECCIÓN APLICADA
     @Column(name = "contador_de_ventas", nullable = false)
     private Integer contadorDeVentas  = 0;
 

@@ -1,6 +1,7 @@
 package entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -13,6 +14,8 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table(name ="trabajos")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Añadido para STI
+@DiscriminatorColumn(name = "tipo_trabajo", discriminatorType = DiscriminatorType.STRING) // Añadido para el discriminador
 public abstract class Trabajo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,11 +29,12 @@ public abstract class Trabajo {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Column(name = "descuento", nullable = false)
-    private Double descuento;
+    @Column(name = "descuento", nullable = false, precision = 15, scale = 2)
+    @DecimalMin(value = "0.0", inclusive = true, message = "El descuento debe ser mayor o igual a cero")
+    private BigDecimal descuento;
 
     @ManyToOne
-    @JoinColumn(name = "idAmbiente", nullable = false)
+    @JoinColumn(name = "ambiente_id", nullable = false)
     private Ambiente ambiente;
 
 
